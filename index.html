@@ -1,0 +1,58 @@
+<html>
+<head>
+
+	<!-- Le metatag -->
+	<title>Hello AngularJS</title>
+
+	<!-- Le script -->
+	<script type='text/javascript' src='js/angular.min.js'></script>
+	<script type='text/javascript' src='js/app.js'></script>
+	<script type='text/javascript' src='js/form.js'></script>
+	<script type='text/javascript' src='js/grid.js'></script>
+
+	<!-- Le styles -->
+	<link rel="stylesheet" href="styles/main.css" type="text/css" />
+</head>
+<body>
+
+	<div ng-app='levelApp'>
+		<div id="settingsPanel" ng-class="{hidden: isHidden}" ng-controller='settingsCtrl'>
+			<!-- Form to set the settings -->
+			<form name="settingsForm">
+				<p>Level</p>
+				<input type="range" ng-model="level" name="level" min="0" max="255">
+				<span class="inputRepeater" ng-bind="level"></span>
+
+				<p>Size</p>
+				<input type="range" ng-model="size" name="size" min="8" max="40">
+				<span class="inputRepeater" ng-bind="size"></span>
+
+				<span class="button" ng-click="updateSettings()">Update</span>
+			</form>
+
+			<!-- List of colors -->
+			<div class="colorCollection" ng-hide="colorCollection.length == 0">
+				<!-- <span ng-repeat="item in colorCollection" title="{{item.color|hexacolor}} | {{item.color.r}}.{{item.color.g}}.{{item.color.b}}" style="background-color:rgba({{item.color.r}},{{item.color.g}},{{item.color.b}},1)"></span> -->
+
+				<div ng-repeat="item in colorCollection" class="colorId">
+					<span style="background-color:rgba({{item.color.r}},{{item.color.g}},{{item.color.b}},1)"></span>
+					<p>{{item.color|hexacolor}}<br><small>rgb:{{item.color.r}}.{{item.color.g}}.{{item.color.b}} / level:{{item.settings.level}} / size:{{item.settings.size}}</small></p>
+				</div>
+			</div>
+
+			<!-- Button to show or hide the settings panel -->
+			<span ng-show="isHidden" class="miniButton" ng-click="show()">></span>
+			<span ng-hide="isHidden" class="miniButton" ng-click="show()"><</span>
+		</div>
+		<div id="grid" ng-controller='gridCtrl' ng-class="{dark: settings.level < 80}">
+			<table>
+				<tr ng-repeat="line in grid">
+					<td ng-repeat="color in line" ng-click="addToCollection(color)" style="background-color:rgba({{color.r}},{{color.g}},{{color.b}},1)">
+						<p>{{color|hexacolor}}<br>{{color.r}}.{{color.g}}.{{color.b}}</p>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>
